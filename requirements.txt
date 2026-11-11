@@ -6,4 +6,4 @@ numpy
 pathlib
 openpyxl
 gspread
-nba_api.stats.endpoints
+nba-api
