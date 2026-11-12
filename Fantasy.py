@@ -30,7 +30,7 @@ ESPERA_INICIAL_QUOTA = 65
 
 
 def log(msg):
-    print(msg)
+    print(msg, flush=True)
 
 
 def stats_vazias():
@@ -207,8 +207,16 @@ def buscar_stats_com_cache(game_id: str, player_name: str) -> tuple[dict, str]:
                 cache_save(CACHE)
 
         except Exception as exc:
-            log(f"Erro ao buscar boxscore para GameID {game_id}: {exc}")
-            return stats_vazias(), "error"
+            mensagem = (
+                f"Falha na consulta à NBA API | "
+                f"GameID: {game_id} | "
+                f"Jogador: {player_name} | "
+                f"{type(exc).__name__}: {exc}"
+            )
+
+            log(mensagem)
+
+            raise RuntimeError(mensagem) from exc
 
     if not isinstance(df_data, list) or not all(isinstance(r, dict) for r in df_data):
         log(f"Cache/API devolveu formato inválido para {game_id}; pulando.")
